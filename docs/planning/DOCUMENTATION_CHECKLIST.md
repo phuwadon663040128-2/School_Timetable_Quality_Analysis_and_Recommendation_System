@@ -20,14 +20,17 @@
 - [ ] API_CONTRACTS.md
 - [ ] DATA_DICTIONARY.md
 - [ ] ERD.md
+- [ ] ERD.drawio
 - [ ] SEED_DATA_PLAN.md
 - [ ] CONSTRAINT_TEST_MATRIX.md
 - [ ] DEMO_SCENARIOS.md
 - [ ] SCREEN_LIST.md
 - [ ] WIREFRAME_PLAN.md
 - [ ] WIREFRAMES.md
+- [ ] WIREFRAME_FLOW.drawio
 - [ ] RISK_REGISTER.md
 - [ ] PROPOSAL_OUTLINE.md
+- [ ] SLIDE_STORYBOARD.md
 
 ## Advisor Review Checklist
 - [ ] Scope ไม่กว้างเกิน 9 เดือน
