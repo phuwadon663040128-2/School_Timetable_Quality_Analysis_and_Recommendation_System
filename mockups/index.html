@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>School Timetable Mock-up</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="เมนูหลัก">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">ST</div>
+          <div>
+            <p class="brand-title">Timetable Quality</p>
+            <p class="brand-subtitle">โรงเรียนตัวอย่าง</p>
+          </div>
+        </div>
+
+        <div class="role-note" id="roleNote"></div>
+
+        <nav class="side-nav" id="sideNav" aria-label="เมนูตามบทบาท"></nav>
+      </aside>
+
+      <main class="main-shell">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">ระบบวิเคราะห์และเพิ่มประสิทธิภาพตารางสอนโรงเรียน</p>
+            <h1 id="pageTitle">Dashboard</h1>
+          </div>
+
+          <div class="topbar-actions">
+            <label class="select-label" for="roleSelect">
+              <span>บทบาท</span>
+              <select id="roleSelect"></select>
+            </label>
+            <label class="select-label" for="termSelect">
+              <span>ภาคเรียน</span>
+              <select id="termSelect">
+                <option>1/2569</option>
+                <option>2/2569</option>
+              </select>
+            </label>
+            <span class="status-pill status-info" id="statusPill">draft</span>
+          </div>
+        </header>
+
+        <section class="content-grid">
+          <div class="workspace" id="workspace" aria-live="polite"></div>
+          <aside class="context-panel" id="contextPanel" aria-label="บริบทและสิทธิ์"></aside>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="assets/js/mock-data.js"></script>
+    <script src="assets/js/roles.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>

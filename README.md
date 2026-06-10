@@ -55,7 +55,15 @@
 ## Project Layout
 - เอกสารหลักอยู่ที่ root เช่น PRODUCT.md, DOMAIN.md, REQUIREMENTS.md, DATA_MODEL.md, WORKFLOWS.md
 - เอกสารเสริมอยู่ใน `docs/`
+- Static HTML mock-up อยู่ใน `mockups/`
 - คำสั่งและ context สำหรับ AI อยู่ใน `CLAUDE.md`, `AGENTS.md`, `AI_CONTEXT.md` และ `.claude/`
 - โครง Laravel placeholder อยู่ใน `src/` แต่ยังไม่ใช่ Laravel project ที่รันได้จริง
 
 ดูรายละเอียดเพิ่มเติมที่ `docs/PROJECT_STRUCTURE.md`
+
+## Static Mock-up
+เปิดตัวอย่างหน้าระบบและ role switcher ได้ที่:
+
+```txt
+mockups/index.html
+```

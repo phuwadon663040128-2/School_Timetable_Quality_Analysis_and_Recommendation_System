@@ -23,6 +23,7 @@ School_Timetable_Quality_Analysis_and_Recommendation_System/
 ├─ MEMORY.md
 ├─ .claude/
 ├─ docs/
+├─ mockups/
 └─ src/
 ```
 
@@ -64,3 +65,15 @@ src/
 
 ## Important Note
 `src/` ตอนนี้เป็น placeholder เพื่อแสดงโครงสร้างตาม Laravel stack เท่านั้น ยังไม่ใช่ Laravel project ที่รันได้จริง
+
+## Static Mock-up
+```txt
+mockups/
+├─ index.html
+├─ README.md
+└─ assets/
+   ├─ css/
+   └─ js/
+```
+
+โฟลเดอร์ `mockups/` ใช้สำหรับดูภาพรวมระบบและ role-based UI template แบบ static เท่านั้น ยังไม่เชื่อม backend

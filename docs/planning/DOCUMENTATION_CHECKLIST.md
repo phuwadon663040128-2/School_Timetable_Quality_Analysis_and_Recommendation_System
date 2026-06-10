@@ -31,6 +31,7 @@
 - [ ] RISK_REGISTER.md
 - [ ] PROPOSAL_OUTLINE.md
 - [ ] SLIDE_STORYBOARD.md
+- [ ] Static HTML mock-up in mockups/
 
 ## Advisor Review Checklist
 - [ ] Scope ไม่กว้างเกิน 9 เดือน
