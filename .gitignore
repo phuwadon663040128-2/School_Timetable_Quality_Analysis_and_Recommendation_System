@@ -1,0 +1,31 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+node_modules/
+src/vendor/
+src/node_modules/
+
+# Build / cache
+src/public/build/
+src/storage/framework/cache/
+src/storage/framework/sessions/
+src/storage/framework/views/
+src/storage/logs/*.log
+
+# Test / coverage
+coverage/
+.phpunit.cache/
+
+# Local exports
+exports/
+tmp/
