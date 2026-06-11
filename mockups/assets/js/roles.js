@@ -2,103 +2,103 @@ window.RoleConfig = {
   admin: {
     label: "Admin",
     thaiLabel: "ผู้ดูแลระบบ",
-    badge: "System control",
-    description: "ดูแลผู้ใช้ สิทธิ์ ข้อมูลกลาง และ audit log",
+    badge: "ควบคุมระบบ",
+    description: "ดูแลผู้ใช้ สิทธิ์ ข้อมูลกลาง และประวัติการดำเนินการ",
     defaultPage: "dashboard",
     permissions: ["manage_users", "manage_master_data", "view_audit"],
     menus: [
-      ["dashboard", "Dashboard", "layout-dashboard"],
-      ["users", "User & Role", "shield-check"],
-      ["masterData", "Master Data", "database"],
-      ["reports", "Reports", "file-text"],
-      ["audit", "Audit Log", "history"]
+      ["dashboard", "ภาพรวม", "layout-dashboard"],
+      ["users", "ผู้ใช้และสิทธิ์", "shield-check"],
+      ["masterData", "ข้อมูลกลาง", "database"],
+      ["reports", "รายงาน", "file-text"],
+      ["audit", "ประวัติการดำเนินการ", "history"]
     ]
   },
   academicStaff: {
-    label: "Academic Staff",
+    label: "ฝ่ายวิชาการ",
     thaiLabel: "ฝ่ายวิชาการ",
-    badge: "Scheduler",
-    description: "จัดตาราง draft ตรวจ conflict ส่งอนุมัติ และ publish ตามสิทธิ์",
+    badge: "ผู้จัดตาราง",
+    description: "จัดตารางฉบับร่าง ตรวจตารางชน ส่งอนุมัติ และเผยแพร่ตามสิทธิ์",
     defaultPage: "dashboard",
     permissions: ["edit_timetable", "submit_timetable", "publish_timetable", "manage_master_data"],
     menus: [
-      ["dashboard", "Dashboard", "layout-dashboard"],
-      ["masterData", "Master Data", "database"],
-      ["assignments", "Teaching Assignment", "clipboard-list"],
-      ["timetable", "Timetable Editor", "calendar-days"],
-      ["quality", "Conflict & Quality", "activity"],
-      ["recommendations", "Recommendation", "lightbulb"],
-      ["approval", "Submit / Publish", "send"],
-      ["reports", "Reports", "file-text"]
+      ["dashboard", "ภาพรวม", "layout-dashboard"],
+      ["masterData", "ข้อมูลกลาง", "database"],
+      ["assignments", "ภาระสอน", "clipboard-list"],
+      ["timetable", "จัดตารางสอน", "calendar-days"],
+      ["quality", "ตรวจชนและคุณภาพ", "activity"],
+      ["recommendations", "คำแนะนำ", "lightbulb"],
+      ["approval", "ส่งอนุมัติ/เผยแพร่", "send"],
+      ["reports", "รายงาน", "file-text"]
     ]
   },
   departmentHead: {
-    label: "Department Head",
+    label: "หัวหน้ากลุ่มสาระ",
     thaiLabel: "หัวหน้ากลุ่มสาระ",
-    badge: "Reviewer",
+    badge: "ผู้ตรวจสอบ",
     description: "ตรวจภาระครูและความถูกต้องเฉพาะกลุ่มสาระของตนเอง",
     defaultPage: "departmentDashboard",
     permissions: ["review_department", "view_department_workload"],
     menus: [
-      ["departmentDashboard", "Dashboard", "layout-dashboard"],
-      ["assignments", "Teaching Assignment", "clipboard-list"],
-      ["departmentWorkload", "Teacher Workload", "bar-chart-3"],
-      ["review", "Review Timetable", "message-square-text"],
-      ["reports", "Reports", "file-text"]
+      ["departmentDashboard", "ภาพรวม", "layout-dashboard"],
+      ["assignments", "ภาระสอน", "clipboard-list"],
+      ["departmentWorkload", "ภาระสอนครู", "bar-chart-3"],
+      ["review", "ตรวจตาราง", "message-square-text"],
+      ["reports", "รายงาน", "file-text"]
     ]
   },
   academicLead: {
-    label: "Academic Lead",
+    label: "หัวหน้างานวิชาการ",
     thaiLabel: "หัวหน้างานวิชาการ / รองฯ วิชาการ",
-    badge: "Approver",
+    badge: "ผู้อนุมัติ",
     description: "ตรวจภาพรวม อนุมัติหรือส่งกลับตารางก่อนเผยแพร่",
     defaultPage: "approval",
     permissions: ["approve_timetable", "return_timetable", "publish_timetable", "view_quality"],
     menus: [
-      ["dashboard", "Dashboard", "layout-dashboard"],
-      ["approval", "Approval Queue", "check-circle-2"],
-      ["quality", "Quality Summary", "activity"],
-      ["recommendations", "Recommendation", "lightbulb"],
-      ["reports", "Reports", "file-text"]
+      ["dashboard", "ภาพรวม", "layout-dashboard"],
+      ["approval", "รายการรออนุมัติ", "check-circle-2"],
+      ["quality", "สรุปคุณภาพ", "activity"],
+      ["recommendations", "คำแนะนำ", "lightbulb"],
+      ["reports", "รายงาน", "file-text"]
     ]
   },
   teacher: {
-    label: "Teacher",
+    label: "ครูผู้สอน",
     thaiLabel: "ครูผู้สอน",
-    badge: "Published view",
-    description: "ดูตารางสอนและภาระสอนของตนเองหลัง publish",
+    badge: "มุมมองหลังเผยแพร่",
+    description: "ดูตารางสอนและภาระสอนของตนเองหลังเผยแพร่",
     defaultPage: "myTimetable",
     permissions: ["view_own_timetable", "print_own_timetable"],
     menus: [
-      ["myTimetable", "My Timetable", "calendar-check"],
-      ["myWorkload", "My Workload", "briefcase-business"],
-      ["reports", "Print / PDF", "printer"]
+      ["myTimetable", "ตารางสอนของฉัน", "calendar-check"],
+      ["myWorkload", "ภาระสอนของฉัน", "briefcase-business"],
+      ["reports", "พิมพ์/PDF", "printer"]
     ]
   },
   homeroomTeacher: {
-    label: "Homeroom Teacher",
+    label: "ครูประจำชั้น",
     thaiLabel: "ครูประจำชั้น",
-    badge: "Class view",
+    badge: "มุมมองห้องเรียน",
     description: "ดูและพิมพ์ตารางเรียนของห้องที่รับผิดชอบ",
     defaultPage: "homeroomTimetable",
     permissions: ["view_homeroom_timetable", "print_homeroom_timetable"],
     menus: [
-      ["homeroomTimetable", "Class Timetable", "calendar-range"],
-      ["classTeachers", "Subject Teachers", "users"],
-      ["reports", "Print / PDF", "printer"]
+      ["homeroomTimetable", "ตารางเรียนของห้อง", "calendar-range"],
+      ["classTeachers", "ครูประจำวิชา", "users"],
+      ["reports", "พิมพ์/PDF", "printer"]
     ]
   },
   director: {
-    label: "Director / Viewer",
-    thaiLabel: "ผู้บริหาร / Viewer",
-    badge: "View only",
-    description: "ดู dashboard ภาพรวม คุณภาพตาราง และรายงานหลัง publish",
+    label: "ผู้บริหาร / ผู้ดูแลภาพรวม",
+    thaiLabel: "ผู้บริหาร / ผู้ดูแลภาพรวม",
+    badge: "ดูอย่างเดียว",
+    description: "ดูภาพรวม คุณภาพตาราง และรายงานหลังเผยแพร่",
     defaultPage: "executiveDashboard",
     permissions: ["view_dashboard", "view_reports"],
     menus: [
-      ["executiveDashboard", "Executive Dashboard", "layout-dashboard"],
-      ["quality", "Quality Summary", "activity"],
-      ["reports", "Reports", "file-text"]
+      ["executiveDashboard", "ภาพรวมผู้บริหาร", "layout-dashboard"],
+      ["quality", "สรุปคุณภาพ", "activity"],
+      ["reports", "รายงาน", "file-text"]
     ]
   }
 };

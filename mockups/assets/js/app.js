@@ -15,24 +15,24 @@
   };
 
   const pageTitles = {
-    dashboard: "Dashboard",
-    departmentDashboard: "Dashboard กลุ่มสาระ",
-    executiveDashboard: "Executive Dashboard",
-    users: "User & Role",
-    masterData: "Master Data",
-    assignments: "Teaching Assignment",
-    departmentWorkload: "Teacher Workload",
-    timetable: "Timetable Editor",
-    quality: "Conflict & Quality",
-    recommendations: "Recommendation",
-    review: "Department Review",
-    approval: "Approval Queue",
-    reports: "Reports",
-    audit: "Audit Log",
-    myTimetable: "My Timetable",
-    myWorkload: "My Workload",
-    homeroomTimetable: "Class Timetable",
-    classTeachers: "Subject Teachers"
+    dashboard: "ภาพรวม",
+    departmentDashboard: "ภาพรวมกลุ่มสาระ",
+    executiveDashboard: "ภาพรวมผู้บริหาร",
+    users: "ผู้ใช้และสิทธิ์",
+    masterData: "ข้อมูลกลาง",
+    assignments: "ภาระสอน",
+    departmentWorkload: "ภาระสอนครู",
+    timetable: "จัดตารางสอน",
+    quality: "ตรวจชนและคุณภาพ",
+    recommendations: "คำแนะนำ",
+    review: "ตรวจสอบโดยกลุ่มสาระ",
+    approval: "รายการรออนุมัติ",
+    reports: "รายงาน",
+    audit: "ประวัติการดำเนินการ",
+    myTimetable: "ตารางสอนของฉัน",
+    myWorkload: "ภาระสอนของฉัน",
+    homeroomTimetable: "ตารางเรียนของห้อง",
+    classTeachers: "ครูประจำวิชา"
   };
 
   const pageRenderers = {
@@ -85,8 +85,8 @@
     const pageExists = role.menus.some(([key]) => key === state.pageKey);
     if (!pageExists) state.pageKey = role.defaultPage;
 
-    pageTitle.textContent = pageTitles[state.pageKey] || "Mock-up";
-    statusPill.textContent = state.timetableStatus;
+    pageTitle.textContent = pageTitles[state.pageKey] || "ต้นแบบหน้าจอ";
+    statusPill.textContent = statusLabel(state.timetableStatus);
     statusPill.className = `status-pill ${statusClass(state.timetableStatus)}`;
 
     renderRoleNote(role);
@@ -130,7 +130,7 @@
   function renderContext(role) {
     const permissions = role.permissions
       .map((permission) => {
-        return `<li><span>${permission}</span><span class="badge badge-success">on</span></li>`;
+        return `<li><span>${permissionLabel(permission)}</span><span class="badge badge-success">เปิดใช้</span></li>`;
       })
       .join("");
 
@@ -156,16 +156,16 @@
         </div>
         <div class="section-body panel-list">
           <div class="panel-item">
-            <strong>Status</strong>
-            <p><span class="status-pill ${statusClass(state.timetableStatus)}">${state.timetableStatus}</span></p>
+            <strong>สถานะ</strong>
+            <p><span class="status-pill ${statusClass(state.timetableStatus)}">${statusLabel(state.timetableStatus)}</span></p>
           </div>
           <div class="panel-item">
-            <strong>Publish gate</strong>
-            <p>${state.hardConflictCount === 0 ? "ผ่าน ไม่มี hard conflict" : "ยัง publish ไม่ได้ มี hard conflict"}</p>
+            <strong>เงื่อนไขเผยแพร่</strong>
+            <p>${state.hardConflictCount === 0 ? "ผ่าน ไม่มีตารางชนรุนแรง" : "ยังเผยแพร่ไม่ได้ มีตารางชนรุนแรง"}</p>
           </div>
           <div class="panel-item">
-            <strong>Quality Score</strong>
-            <p>${state.qualityScore}/100, warning ${state.warnings} รายการ</p>
+            <strong>คะแนนคุณภาพ</strong>
+            <p>${state.qualityScore}/100, คำเตือน ${state.warnings} รายการ</p>
           </div>
         </div>
       </section>
@@ -176,10 +176,10 @@
     return `
       <div class="stack">
         ${renderMetricSection("ภาพรวมงานจัดตาราง", [
-          ["ครู", data.metrics.teachers, "ข้อมูล active"],
+          ["ครู", data.metrics.teachers, "ข้อมูลที่ใช้งาน"],
           ["ห้องเรียน", data.metrics.classSections, "ม.1 ถึง ม.6"],
-          ["Conflict", state.hardConflictCount, "hard conflict"],
-          ["Quality", `${state.qualityScore}/100`, "พร้อมส่งตรวจ"]
+          ["ตารางชน", state.hardConflictCount, "ตารางชนรุนแรง"],
+          ["คุณภาพ", `${state.qualityScore}/100`, "พร้อมส่งตรวจ"]
         ])}
         <section class="section">
           <div class="section-header">
@@ -194,9 +194,9 @@
           </div>
           <div class="section-body split">
             ${renderPanelList([
-              ["Review pending", "หัวหน้ากลุ่มสาระคณิตศาสตร์ยังไม่ได้บันทึก review", "warning"],
-              ["Ready to submit", "ตาราง ม.ต้น ไม่มี hard conflict", "passed"],
-              ["Calendar warning", "มีรายการทับกิจกรรมวันภาษาไทย 1 รายการ", "warning"]
+              ["รอตรวจสอบ", "หัวหน้ากลุ่มสาระคณิตศาสตร์ยังไม่ได้บันทึกการตรวจสอบ", "warning"],
+              ["พร้อมส่งอนุมัติ", "ตาราง ม.ต้น ไม่มีตารางชนรุนแรง", "passed"],
+              ["คำเตือนจากปฏิทิน", "มีรายการทับกิจกรรมวันภาษาไทย 1 รายการ", "warning"]
             ])}
             ${renderStatusTimeline()}
           </div>
@@ -209,10 +209,10 @@
     return `
       <div class="stack">
         ${renderMetricSection("ภาพรวมกลุ่มสาระคณิตศาสตร์", [
-          ["ครูในกลุ่ม", 6, "active"],
+          ["ครูในกลุ่ม", 6, "ใช้งาน"],
           ["ภาระสอน", "84", "คาบ/สัปดาห์"],
-          ["Warning", 2, "เฉพาะกลุ่มสาระ"],
-          ["Reviewed", state.reviewSaved ? "yes" : "no", "สถานะ review"]
+          ["คำเตือน", 2, "เฉพาะกลุ่มสาระ"],
+          ["ตรวจแล้ว", state.reviewSaved ? "ใช่" : "ไม่", "สถานะตรวจสอบ"]
         ])}
         <section class="section">
           <div class="section-header">
@@ -220,7 +220,7 @@
               <h2>รายการที่ควรตรวจ</h2>
               <p>ขอบเขตข้อมูลจำกัดเฉพาะกลุ่มสาระที่รับผิดชอบ</p>
             </div>
-            <button class="button primary" data-go="review"><i data-lucide="message-square-text"></i> Review ตาราง</button>
+            <button class="button primary" data-go="review"><i data-lucide="message-square-text"></i> ตรวจตาราง</button>
           </div>
           <div class="section-body">
             ${renderReviewTable()}
@@ -234,18 +234,18 @@
     return `
       <div class="stack">
         ${renderMetricSection("ภาพรวมผู้บริหาร", [
-          ["Published", state.timetableStatus === "published" ? "yes" : "no", "สถานะเผยแพร่"],
-          ["Quality", `${state.qualityScore}/100`, "ภาพรวม"],
-          ["Hard conflict", state.hardConflictCount, "ต้องเป็น 0"],
-          ["Warnings", state.warnings, "ติดตาม"]
+          ["เผยแพร่แล้ว", state.timetableStatus === "published" ? "ใช่" : "ไม่", "สถานะเผยแพร่"],
+          ["คุณภาพ", `${state.qualityScore}/100`, "ภาพรวม"],
+          ["ตารางชนรุนแรง", state.hardConflictCount, "ต้องเป็น 0"],
+          ["คำเตือน", state.warnings, "ติดตาม"]
         ])}
         <section class="section">
           <div class="section-header">
             <div>
-              <h2>Read-only summary</h2>
+              <h2>สรุปสำหรับดูอย่างเดียว</h2>
               <p>มุมมองรายงานภาพรวมและสถานะตารางล่าสุด</p>
             </div>
-            <span class="badge badge-muted">view-only</span>
+            <span class="badge badge-muted">ดูอย่างเดียว</span>
           </div>
           <div class="section-body">
             ${renderQualityBreakdown()}
@@ -260,16 +260,16 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>User & Role</h2>
+            <h2>ผู้ใช้และสิทธิ์</h2>
             <p>กำหนดบทบาท สิทธิ์ และขอบเขตการเข้าถึง</p>
           </div>
           <button class="button primary"><i data-lucide="user-plus"></i> เพิ่มผู้ใช้</button>
         </div>
         <div class="section-body">
-          ${renderSimpleTable(["Role", "หน้าที่", "Permission หลัก"], Object.values(roles).map((role) => [
+          ${renderSimpleTable(["บทบาท", "หน้าที่", "สิทธิ์หลัก"], Object.values(roles).map((role) => [
             role.thaiLabel,
             role.description,
-            role.permissions.slice(0, 3).join(", ")
+            role.permissions.slice(0, 3).map(permissionLabel).join(", ")
           ]))}
         </div>
       </section>
@@ -281,8 +281,8 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Master Data</h2>
-            <p>ข้อมูลกลางสำหรับ timetable workflow</p>
+            <h2>ข้อมูลกลาง</h2>
+            <p>ข้อมูลกลางสำหรับขั้นตอนจัดตารางสอน</p>
           </div>
           <button class="button primary"><i data-lucide="plus"></i> เพิ่มข้อมูล</button>
         </div>
@@ -298,7 +298,7 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Teaching Assignment</h2>
+            <h2>ภาระสอน</h2>
             <p>กำหนดครู วิชา ห้องเรียน จำนวนคาบ และประเภทห้อง</p>
           </div>
           <button class="button primary"><i data-lucide="plus"></i> เพิ่มภาระสอน</button>
@@ -315,8 +315,8 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Teacher Workload</h2>
-            <p>มุมมองหัวหน้ากลุ่มสาระ ใช้ตรวจภาระครูก่อน review</p>
+            <h2>ภาระสอนครู</h2>
+            <p>มุมมองหัวหน้ากลุ่มสาระ ใช้ตรวจภาระครูก่อนตรวจสอบ</p>
           </div>
         </div>
         <div class="section-body">
@@ -332,13 +332,13 @@
         <section class="section">
           <div class="section-header">
             <div>
-              <h2>จัดตาราง Draft: ${data.timetable.classSection}</h2>
-              <p>เลือก cell เพื่อดูรายละเอียด ระบบแสดง hard block และ warning จาก calendar</p>
+              <h2>จัดตารางฉบับร่าง: ${data.timetable.classSection}</h2>
+              <p>เลือกช่องตาราง เพื่อดูรายละเอียด ระบบแสดง ช่วงเวลาห้ามจัด และ คำเตือนจากปฏิทิน</p>
             </div>
             <div class="actions">
-              <button class="button" data-action="run-conflict"><i data-lucide="search-check"></i> ตรวจ Conflict</button>
+              <button class="button" data-action="run-conflict"><i data-lucide="search-check"></i> ตรวจตารางชน</button>
               <button class="button primary" data-action="analyze"><i data-lucide="activity"></i> วิเคราะห์</button>
-              <button class="button success" data-action="submit" ${canSubmit() ? "" : "disabled"}><i data-lucide="send"></i> Submit</button>
+              <button class="button success" data-action="submit" ${canSubmit() ? "" : "disabled"}><i data-lucide="send"></i> ส่งอนุมัติ</button>
             </div>
           </div>
           <div class="section-body">
@@ -357,11 +357,11 @@
             <div class="panel-list">
               <div class="panel-item">
                 <strong>${state.selectedCell.subject || "ยังไม่มีรายการ"}</strong>
-                <p>${state.selectedCell.teacher || "เลือก teaching assignment"} | ห้อง ${state.selectedCell.room || "-"}</p>
+                <p>${state.selectedCell.teacher || "เลือกภาระสอน"} | ห้อง ${state.selectedCell.room || "-"}</p>
               </div>
               <div class="panel-item">
-                <strong>Conflict result</strong>
-                <p>${state.selectedCell.state === "blocked" ? "คาบนี้ถูก block ไม่ควรจัดวิชาปกติ" : "ไม่พบ hard conflict ในรายการนี้"}</p>
+                <strong>ผลตรวจตารางชน</strong>
+                <p>${state.selectedCell.state === "blocked" ? "คาบนี้เป็นช่วงเวลาห้ามจัด ไม่ควรจัดวิชาปกติ" : "ไม่พบตารางชนรุนแรงในรายการนี้"}</p>
               </div>
             </div>
             <div class="inline-help">
@@ -378,10 +378,10 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Conflict & Quality</h2>
-            <p>Hard conflict เป็น publish gate ส่วน warning ใช้หักคะแนน</p>
+            <h2>ตรวจชนและคุณภาพ</h2>
+            <p>ตารางชนรุนแรงเป็นเงื่อนไขเผยแพร่ ส่วนคำเตือนใช้หักคะแนน</p>
           </div>
-          <button class="button primary" data-go="recommendations"><i data-lucide="lightbulb"></i> ดู Recommendation</button>
+          <button class="button primary" data-go="recommendations"><i data-lucide="lightbulb"></i> ดูคำแนะนำ</button>
         </div>
         <div class="section-body split">
           ${renderQualityBreakdown()}
@@ -396,17 +396,17 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Recommendation</h2>
+            <h2>คำแนะนำ</h2>
             <p>ข้อเสนอพร้อมคะแนนก่อนและหลังที่คาดการณ์</p>
           </div>
           <span class="badge badge-info">82 -> 87</span>
         </div>
         <div class="section-body">
           <div class="metrics-grid" style="margin-bottom: 14px;">
-            <div class="metric"><span class="metric-label">Before score</span><span class="metric-value">82</span><p class="metric-sub">คะแนนปัจจุบัน</p></div>
-            <div class="metric"><span class="metric-label">Predicted after</span><span class="metric-value">87</span><p class="metric-sub">หลังทำตามข้อเสนอ</p></div>
-            <div class="metric"><span class="metric-label">Warning reduction</span><span class="metric-value">2</span><p class="metric-sub">รายการที่ลดลง</p></div>
-            <div class="metric"><span class="metric-label">Auto edit</span><span class="metric-value">No</span><p class="metric-sub">ผู้ใช้เป็นคนตัดสินใจ</p></div>
+            <div class="metric"><span class="metric-label">คะแนนก่อนปรับ</span><span class="metric-value">82</span><p class="metric-sub">คะแนนปัจจุบัน</p></div>
+            <div class="metric"><span class="metric-label">คะแนนคาดการณ์</span><span class="metric-value">87</span><p class="metric-sub">หลังทำตามข้อเสนอ</p></div>
+            <div class="metric"><span class="metric-label">คำเตือนที่ลดลง</span><span class="metric-value">2</span><p class="metric-sub">รายการที่ลดลง</p></div>
+            <div class="metric"><span class="metric-label">แก้อัตโนมัติ</span><span class="metric-value">ไม่</span><p class="metric-sub">ผู้ใช้เป็นคนตัดสินใจ</p></div>
           </div>
           ${renderSimpleTable(["ข้อเสนอ", "เหตุผล", "ผลที่คาดหวัง", "ประเภท"], data.recommendations.map((r) => [r.title, r.reason, r.impact, r.action]))}
         </div>
@@ -419,21 +419,21 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Department Review</h2>
-            <p>หัวหน้ากลุ่มสาระตรวจเฉพาะส่วนของตนเอง ไม่ใช่ approver หลัก</p>
+            <h2>ตรวจสอบโดยกลุ่มสาระ</h2>
+            <p>หัวหน้ากลุ่มสาระตรวจเฉพาะส่วนของตนเอง ไม่ใช่ผู้อนุมัติหลัก</p>
           </div>
-          <span class="badge ${state.reviewSaved ? "badge-success" : "badge-warning"}">${state.reviewSaved ? "reviewed" : "pending"}</span>
+          <span class="badge ${state.reviewSaved ? "badge-success" : "badge-warning"}">${state.reviewSaved ? "ตรวจแล้ว" : "รอตรวจสอบ"}</span>
         </div>
         <div class="section-body stack">
           ${renderReviewTable()}
           <div>
             <label class="select-label" for="reviewComment">
               <span>ความคิดเห็นสำหรับฝ่ายวิชาการ</span>
-              <textarea id="reviewComment">ภาระครูในกลุ่มสาระเหมาะสม มี warning ห้อง Lab ที่ควรตรวจอีกครั้ง</textarea>
+              <textarea id="reviewComment">ภาระครูในกลุ่มสาระเหมาะสม มีคำเตือนเรื่องห้องปฏิบัติการที่ควรตรวจอีกครั้ง</textarea>
             </label>
           </div>
           <div class="actions">
-            <button class="button primary" data-action="save-review"><i data-lucide="save"></i> บันทึก Review</button>
+            <button class="button primary" data-action="save-review"><i data-lucide="save"></i> บันทึกการตรวจสอบ</button>
           </div>
         </div>
       </section>
@@ -450,32 +450,32 @@
         <section class="section">
           <div class="section-header">
             <div>
-              <h2>Approval Queue</h2>
-              <p>approved ยังไม่เท่ากับ published และ hard conflict ทำให้ publish ไม่ได้</p>
+              <h2>รายการรออนุมัติ</h2>
+              <p>อนุมัติแล้ว ยังไม่เท่ากับเผยแพร่แล้ว และตารางชนรุนแรงทำให้เผยแพร่ไม่ได้</p>
             </div>
-            <span class="status-pill ${statusClass(state.timetableStatus)}">${state.timetableStatus}</span>
+            <span class="status-pill ${statusClass(state.timetableStatus)}">${statusLabel(state.timetableStatus)}</span>
           </div>
           <div class="section-body">
-            ${renderSimpleTable(["ตาราง", "สถานะ", "Hard Conflict", "Score", "ผู้รับผิดชอบ"], [[data.timetable.name, state.timetableStatus, state.hardConflictCount, `${state.qualityScore}/100`, "ฝ่ายวิชาการ"]])}
+            ${renderSimpleTable(["ตาราง", "สถานะ", "ตารางชนรุนแรง", "คะแนน", "ผู้รับผิดชอบ"], [[data.timetable.name, statusLabel(state.timetableStatus), state.hardConflictCount, `${state.qualityScore}/100`, "ฝ่ายวิชาการ"]])}
           </div>
         </section>
         <section class="section">
           <div class="section-header">
             <div>
-              <h2>Actions</h2>
+              <h2>การดำเนินการ</h2>
               <p>การดำเนินการตามสิทธิ์และสถานะตาราง</p>
             </div>
           </div>
           <div class="section-body stack">
             <div class="actions">
-              <button class="button primary" data-action="submit" ${canSubmitStatus ? "" : "disabled"}><i data-lucide="send"></i> Submit</button>
-              <button class="button success" data-action="approve" ${canApprove ? "" : "disabled"}><i data-lucide="check"></i> Approve</button>
-              <button class="button danger" data-action="return" ${canReturn ? "" : "disabled"}><i data-lucide="undo-2"></i> Return</button>
-              <button class="button success" data-action="publish" ${canPublish ? "" : "disabled"}><i data-lucide="megaphone"></i> Publish</button>
+              <button class="button primary" data-action="submit" ${canSubmitStatus ? "" : "disabled"}><i data-lucide="send"></i> ส่งอนุมัติ</button>
+              <button class="button success" data-action="approve" ${canApprove ? "" : "disabled"}><i data-lucide="check"></i> อนุมัติ</button>
+              <button class="button danger" data-action="return" ${canReturn ? "" : "disabled"}><i data-lucide="undo-2"></i> ส่งกลับ</button>
+              <button class="button success" data-action="publish" ${canPublish ? "" : "disabled"}><i data-lucide="megaphone"></i> เผยแพร่</button>
             </div>
             <label class="select-label" for="returnReason">
-              <span>Return reason</span>
-              <textarea id="returnReason">กรุณาแก้ไข warning ห้อง Lab และตรวจวันกิจกรรมโรงเรียนก่อนส่งใหม่</textarea>
+              <span>เหตุผลการส่งกลับ</span>
+              <textarea id="returnReason">กรุณาแก้ไขคำเตือนเรื่องห้องปฏิบัติการ และตรวจวันกิจกรรมโรงเรียนก่อนส่งใหม่</textarea>
             </label>
           </div>
         </section>
@@ -488,12 +488,12 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Reports / Print PDF</h2>
+            <h2>รายงาน / พิมพ์ PDF</h2>
             <p>รายงานตามสิทธิ์ของบทบาทปัจจุบัน</p>
           </div>
           <div class="actions">
-            <button class="button"><i data-lucide="printer"></i> Print</button>
-            <button class="button primary"><i data-lucide="file-down"></i> Export PDF</button>
+            <button class="button"><i data-lucide="printer"></i> พิมพ์</button>
+            <button class="button primary"><i data-lucide="file-down"></i> ส่งออก PDF</button>
           </div>
         </div>
         <div class="section-body">
@@ -511,23 +511,23 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Audit Log</h2>
-            <p>ติดตาม action สำคัญของตาราง</p>
+            <h2>ประวัติการดำเนินการ</h2>
+            <p>ติดตามการดำเนินการสำคัญของตาราง</p>
           </div>
         </div>
         <div class="section-body">
-          ${renderSimpleTable(["เวลา", "ผู้ใช้", "Action", "รายการ"], data.audit)}
+          ${renderSimpleTable(["เวลา", "ผู้ใช้", "การดำเนินการ", "รายการ"], data.audit)}
         </div>
       </section>
     `;
   }
 
   function renderTeacherTimetable() {
-    return renderPersonalSchedule("ตารางสอนครูสมชาย", "เห็นเฉพาะตารางของครูผู้สอนหลัง publish");
+    return renderPersonalSchedule("ตารางสอนครูสมชาย", "เห็นเฉพาะตารางของครูผู้สอนหลังเผยแพร่");
   }
 
   function renderHomeroomTimetable() {
-    return renderPersonalSchedule("ตารางเรียน ม.2/1", "ครูประจำชั้นดูและ print/PDF ตารางห้องที่รับผิดชอบ");
+    return renderPersonalSchedule("ตารางเรียน ม.2/1", "ครูประจำชั้นดูและพิมพ์/PDF ตารางห้องที่รับผิดชอบ");
   }
 
   function renderMyWorkload() {
@@ -535,7 +535,7 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>My Workload</h2>
+            <h2>ภาระสอนของฉัน</h2>
             <p>สรุปภาระสอนของครูผู้สอน</p>
           </div>
           <span class="badge badge-info">18/22 คาบ</span>
@@ -556,7 +556,7 @@
       <section class="section">
         <div class="section-header">
           <div>
-            <h2>Subject Teachers</h2>
+            <h2>ครูประจำวิชา</h2>
             <p>รายชื่อครูประจำวิชาของห้อง ม.2/1</p>
           </div>
         </div>
@@ -575,7 +575,7 @@
             <h2>${title}</h2>
             <p>${subtitle}</p>
           </div>
-          <button class="button primary"><i data-lucide="printer"></i> Print/PDF</button>
+          <button class="button primary"><i data-lucide="printer"></i> พิมพ์/PDF</button>
         </div>
         <div class="section-body">
           ${renderSmallTimetable()}
@@ -647,7 +647,7 @@
 
     const stateClass = `cell-${entry.state || "passed"}`;
     const label = entry.label || entry.subject;
-    const meta = entry.label ? entry.state : `${entry.teacher} | ${entry.room}`;
+    const meta = entry.label ? typeLabel(entry.state) : `${entry.teacher} | ${entry.room}`;
     const note = entry.note ? `<span class="slot-meta">${entry.note}</span>` : "";
     return `
       <div class="slot-cell ${stateClass}">
@@ -699,8 +699,8 @@
             const stateClass = index <= currentIndex && currentIndex >= 0 ? "badge-success" : "badge-muted";
             return `
               <div class="panel-item">
-                <strong>${step}</strong>
-                <p><span class="badge ${stateClass}">${index <= currentIndex && currentIndex >= 0 ? "done/current" : "pending"}</span></p>
+                <strong>${statusLabel(step)}</strong>
+                <p><span class="badge ${stateClass}">${index <= currentIndex && currentIndex >= 0 ? "เสร็จแล้ว/ปัจจุบัน" : "รอดำเนินการ"}</span></p>
               </div>
             `;
           })
@@ -715,7 +715,7 @@
         ${items
           .map(([title, detail, type]) => `
             <div class="panel-item">
-              <span class="badge ${badgeClass(type)}">${type}</span>
+              <span class="badge ${badgeClass(type)}">${typeLabel(type)}</span>
               <h3 style="margin-top: 8px;">${title}</h3>
               <p>${detail}</p>
             </div>
@@ -758,10 +758,11 @@
   }
 
   function formatCell(cell) {
-    if (cell === "active" || cell === "ผ่าน" || cell === "passed") return `<span class="badge badge-success">${cell}</span>`;
-    if (cell === "warning") return `<span class="badge badge-warning">${cell}</span>`;
-    if (cell === "draft" || cell === "submitted" || cell === "approved") return `<span class="badge badge-info">${cell}</span>`;
-    return cell;
+    const label = typeLabel(cell);
+    if (["ใช้งาน", "ผ่าน", "passed", "success"].includes(cell)) return `<span class="badge badge-success">${label}</span>`;
+    if (["warning", "รอตรวจสอบ"].includes(cell)) return `<span class="badge badge-warning">${label}</span>`;
+    if (["draft", "submitted", "approved", "returned", "published"].includes(cell)) return `<span class="badge badge-info">${statusLabel(cell)}</span>`;
+    return label;
   }
 
   function wirePageActions() {
@@ -794,22 +795,22 @@
 
   function handleAction(action) {
     if (action === "run-conflict") {
-      showToast("ตรวจแล้ว: ไม่พบ hard conflict, มี warning 5 รายการ");
+      showToast("ตรวจแล้ว: ไม่พบตารางชนรุนแรง, มีคำเตือน 5 รายการ");
       return;
     }
     if (action === "analyze") {
       state.pageKey = "quality";
-      showToast("วิเคราะห์ Quality Score แล้ว");
+      showToast("วิเคราะห์คะแนนคุณภาพแล้ว");
       render();
       return;
     }
     if (action === "submit") {
       if (!hasPermission("submit_timetable")) {
-        showToast("บทบาทนี้ไม่มีสิทธิ์ submit");
+        showToast("บทบาทนี้ไม่มีสิทธิ์ส่งอนุมัติ");
         return;
       }
       if (!canSubmit()) {
-        showToast("ยัง submit ไม่ได้ เพราะมี hard conflict หรือสถานะไม่ถูกต้อง");
+        showToast("ยังส่งอนุมัติไม่ได้ เพราะมีตารางชนรุนแรงหรือสถานะไม่ถูกต้อง");
         return;
       }
       state.timetableStatus = "submitted";
@@ -820,14 +821,14 @@
     }
     if (action === "save-review") {
       state.reviewSaved = true;
-      showToast("บันทึก review ของกลุ่มสาระแล้ว");
+      showToast("บันทึกการตรวจสอบของกลุ่มสาระแล้ว");
       render();
       return;
     }
     if (action === "approve") {
       if (!hasPermission("approve_timetable") || state.timetableStatus !== "submitted") return;
       state.timetableStatus = "approved";
-      showToast("อนุมัติตารางแล้ว ยังไม่ได้ publish");
+      showToast("อนุมัติตารางแล้ว ยังไม่ได้เผยแพร่");
       render();
       return;
     }
@@ -835,7 +836,7 @@
       if (!hasPermission("return_timetable") || state.timetableStatus !== "submitted") return;
       const reason = document.getElementById("returnReason")?.value.trim();
       if (!reason) {
-        showToast("กรุณาระบุเหตุผลก่อน return");
+        showToast("กรุณาระบุเหตุผลก่อนส่งกลับ");
         return;
       }
       state.timetableStatus = "returned";
@@ -846,7 +847,7 @@
     if (action === "publish") {
       if (!hasPermission("publish_timetable") || state.timetableStatus !== "approved") return;
       if (state.hardConflictCount > 0) {
-        showToast("publish ไม่ได้ เพราะยังมี hard conflict");
+        showToast("เผยแพร่ไม่ได้ เพราะยังมีตารางชนรุนแรง");
         return;
       }
       state.timetableStatus = "published";
@@ -865,10 +866,10 @@
 
   function reportScopeText() {
     const key = state.roleKey;
-    if (key === "teacher") return "ครูผู้สอนเห็นและ print/PDF เฉพาะตารางของตนเอง";
-    if (key === "homeroomTeacher") return "ครูประจำชั้นเห็นและ print/PDF ตารางเรียนของห้องที่รับผิดชอบ";
-    if (key === "director") return "ผู้บริหารเห็นรายงานภาพรวมแบบ view-only";
-    return "ฝ่ายวิชาการและผู้มีสิทธิ์เห็นรายงานตารางและ quality report ตาม workflow";
+    if (key === "teacher") return "ครูผู้สอนเห็นและพิมพ์/PDF เฉพาะตารางของตนเอง";
+    if (key === "homeroomTeacher") return "ครูประจำชั้นเห็นและพิมพ์/PDF ตารางเรียนของห้องที่รับผิดชอบ";
+    if (key === "director") return "ผู้บริหารเห็นรายงานภาพรวมแบบดูอย่างเดียว";
+    return "ฝ่ายวิชาการและผู้มีสิทธิ์เห็นรายงานตารางและรายงานคุณภาพตามขั้นตอนงาน";
   }
 
   function badgeClass(type) {
@@ -886,6 +887,54 @@
     return "badge-warning";
   }
 
+  function permissionLabel(permission) {
+    const labels = {
+      manage_users: "จัดการผู้ใช้",
+      manage_master_data: "จัดการข้อมูลกลาง",
+      view_audit: "ดูประวัติการดำเนินการ",
+      edit_timetable: "แก้ไขตารางสอน",
+      submit_timetable: "ส่งตารางเพื่ออนุมัติ",
+      publish_timetable: "เผยแพร่ตาราง",
+      review_department: "ตรวจตารางเฉพาะกลุ่มสาระ",
+      view_department_workload: "ดูภาระสอนในกลุ่มสาระ",
+      approve_timetable: "อนุมัติตารางสอน",
+      return_timetable: "ส่งตารางกลับแก้ไข",
+      view_quality: "ดูสรุปคุณภาพตาราง",
+      view_own_timetable: "ดูตารางสอนของตนเอง",
+      print_own_timetable: "พิมพ์ตารางสอนของตนเอง",
+      view_homeroom_timetable: "ดูตารางเรียนของห้องประจำชั้น",
+      print_homeroom_timetable: "พิมพ์ตารางเรียนของห้องประจำชั้น",
+      view_dashboard: "ดูภาพรวมระบบ",
+      view_reports: "ดูรายงาน"
+    };
+    return labels[permission] || permission;
+  }
+  function statusLabel(status) {
+    const labels = {
+      draft: "ฉบับร่าง",
+      submitted: "ส่งอนุมัติแล้ว",
+      returned: "ส่งกลับแล้ว",
+      approved: "อนุมัติแล้ว",
+      published: "เผยแพร่แล้ว",
+      archived: "เก็บถาวร"
+    };
+    return labels[status] || status;
+  }
+
+  function typeLabel(type) {
+    const labels = {
+      warning: "คำเตือน",
+      passed: "ผ่าน",
+      blocked: "ห้ามจัด",
+      error: "ผิดพลาด",
+      danger: "อันตราย",
+      success: "สำเร็จ",
+      pending: "รอดำเนินการ",
+      active: "ใช้งาน",
+      empty: "ว่าง"
+    };
+    return labels[type] || type;
+  }
   function showToast(message) {
     const existing = document.querySelector(".toast");
     if (existing) existing.remove();
