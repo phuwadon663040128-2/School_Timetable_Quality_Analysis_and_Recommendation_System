@@ -1,0 +1,223 @@
+.feedback-v2 {
+  --bg: oklch(0.965 0.006 250);
+  --surface: oklch(0.992 0.004 250);
+  --surface-muted: oklch(0.94 0.008 250);
+  --panel: oklch(0.985 0.005 250);
+  --text: oklch(0.22 0.025 250);
+  --muted: oklch(0.48 0.028 250);
+  --primary: oklch(0.46 0.095 252);
+  --primary-soft: oklch(0.92 0.035 252);
+  --nav-bg: oklch(0.17 0.045 252);
+  --nav-bg-hover: oklch(0.28 0.043 252);
+  --shadow-low: 0 18px 50px oklch(0.42 0.02 250 / 0.08);
+  font-family: "Segoe UI", Tahoma, system-ui, sans-serif;
+  font-size: 14px;
+}
+
+.feedback-v2 .sidebar {
+  width: 280px;
+  padding: 18px 14px;
+  background: var(--nav-bg);
+}
+
+.feedback-v2 .main-shell {
+  margin-left: 280px;
+}
+
+.feedback-v2 .brand-block {
+  padding: 2px 6px 18px;
+}
+
+.feedback-v2 .brand-mark {
+  background: oklch(0.88 0.09 86);
+}
+
+.feedback-v2 .topbar {
+  padding: 18px 24px;
+  box-shadow: none;
+}
+
+.feedback-v2 h1 {
+  font-size: 22px;
+}
+
+.feedback-v2 h2 {
+  font-size: 18px;
+}
+
+.feedback-v2 .content-grid.feedback-wide {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.feedback-v2 .content-grid.feedback-wide .context-panel {
+  display: none;
+}
+
+.feedback-v2 .phase-panel,
+.feedback-v2 .stats-strip {
+  display: none;
+}
+
+.feedback-v2 .feedback-dashboard {
+  display: grid;
+  gap: 16px;
+}
+
+.feedback-v2 .feedback-dashboard .metrics-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.feedback-v2 .feedback-dashboard .metric {
+  min-height: 98px;
+  padding: 14px;
+}
+
+.feedback-v2 .feedback-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 16px;
+}
+
+.feedback-v2 .calm-list {
+  display: grid;
+  gap: 10px;
+}
+
+.feedback-v2 .calm-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.feedback-v2 .calm-item p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.feedback-v2 .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.feedback-v2 .dot.warning {
+  background: var(--warning);
+}
+
+.feedback-v2 .dot.success {
+  background: var(--success);
+}
+
+.feedback-v2 .schedule-frame {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.feedback-v2 .school-schedule {
+  min-width: 1120px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.feedback-v2 .school-schedule th {
+  padding: 8px;
+  border-right: 1px solid oklch(0.48 0.05 252);
+  border-bottom: 1px solid oklch(0.48 0.05 252);
+  background: oklch(0.28 0.08 252);
+  color: oklch(0.98 0.006 252);
+  text-align: center;
+}
+
+.feedback-v2 .school-schedule th small {
+  display: block;
+  margin-top: 3px;
+  color: oklch(0.82 0.025 252);
+  font-size: 10px;
+}
+
+.feedback-v2 .school-schedule .day-head,
+.feedback-v2 .school-schedule .day-cell {
+  width: 86px;
+  background: oklch(0.34 0.095 252);
+  color: oklch(0.98 0.006 252);
+  text-align: center;
+  font-weight: 800;
+  vertical-align: middle;
+}
+
+.feedback-v2 .school-schedule .period-head {
+  width: 112px;
+}
+
+.feedback-v2 .school-schedule .break-head {
+  width: 130px;
+}
+
+.feedback-v2 .school-schedule td {
+  height: 86px;
+  padding: 8px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.feedback-v2 .school-schedule .break-cell {
+  background: oklch(0.955 0.018 235);
+  color: oklch(0.28 0.07 252);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.feedback-v2 .break-icon {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  place-items: center;
+  border-radius: 999px;
+  background: oklch(0.9 0.04 235);
+}
+
+.feedback-v2 .slot-code {
+  display: block;
+  color: oklch(0.3 0.07 252);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.feedback-v2 .slot-title {
+  display: block;
+  margin-top: 2px;
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.feedback-v2 .slot-teacher,
+.feedback-v2 .slot-room {
+  display: block;
+  margin-top: 3px;
+  color: oklch(0.45 0.04 215);
+  font-size: 10.5px;
+}
+
+@media (max-width: 1180px) {
+  .feedback-v2 .main-shell {
+    margin-left: 0;
+  }
+
+  .feedback-v2 .feedback-split {
+    grid-template-columns: 1fr;
+  }
+}

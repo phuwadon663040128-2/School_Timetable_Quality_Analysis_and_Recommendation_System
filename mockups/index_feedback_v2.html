@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ต้นแบบระบบจัดตารางสอน</title>
+    <title>เวอร์ชันหลังแก้ Feedback - ระบบจัดตารางสอน</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/feedback-v2.css" />
   </head>
-  <body>
+  <body class="feedback-v2">
     <div class="app-shell">
       <aside class="sidebar" aria-label="เมนูหลัก">
         <div class="brand-block">
@@ -30,7 +31,7 @@
       <main class="main-shell">
         <header class="topbar">
           <div>
-            <p class="eyebrow">ระบบวิเคราะห์และเพิ่มประสิทธิภาพตารางสอนโรงเรียน | โครงหน้าผู้ดูแลระบบแบบข้อมูลนำหน้า</p>
+            <p class="eyebrow">ระบบวิเคราะห์และเพิ่มประสิทธิภาพตารางสอนโรงเรียน</p>
             <h1 id="pageTitle">ภาพรวม</h1>
           </div>
 
@@ -50,7 +51,7 @@
           </div>
         </header>
 
-        <section class="content-grid">
+        <section class="content-grid" id="contentGrid">
           <div class="workspace" id="workspace" aria-live="polite"></div>
           <aside class="context-panel" id="contextPanel" aria-label="บริบทและสิทธิ์"></aside>
         </section>
@@ -60,6 +61,11 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="assets/js/mock-data.js"></script>
     <script src="assets/js/roles.js"></script>
+    <script>
+      window.RoleConfig.teacher.menus = window.RoleConfig.teacher.menus.filter(([key]) => key !== "reports");
+      window.RoleConfig.homeroomTeacher.menus = window.RoleConfig.homeroomTeacher.menus.filter(([key]) => key !== "reports");
+    </script>
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/feedback-v2.js"></script>
   </body>
 </html>

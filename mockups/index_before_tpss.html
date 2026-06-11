@@ -1,3 +1,881 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ก่อนปรับแนว TPSS - ต้นแบบระบบจัดตารางสอน</title>
+    <style>
+:root {
+  color-scheme: light;
+  --bg: oklch(0.965 0.006 250);
+  --surface: oklch(0.992 0.004 250);
+  --surface-muted: oklch(0.94 0.008 250);
+  --panel: oklch(0.985 0.005 250);
+  --line: oklch(0.86 0.014 250);
+  --line-strong: oklch(0.73 0.025 250);
+  --text: oklch(0.22 0.025 250);
+  --muted: oklch(0.48 0.028 250);
+  --faint: oklch(0.62 0.022 250);
+  --primary: oklch(0.46 0.095 252);
+  --primary-soft: oklch(0.92 0.035 252);
+  --success: oklch(0.52 0.11 155);
+  --success-soft: oklch(0.93 0.04 155);
+  --warning: oklch(0.68 0.12 78);
+  --warning-soft: oklch(0.95 0.055 86);
+  --danger: oklch(0.56 0.16 28);
+  --danger-soft: oklch(0.94 0.045 28);
+  --violet: oklch(0.52 0.09 300);
+  --violet-soft: oklch(0.94 0.035 300);
+  --shadow: 0 18px 50px oklch(0.42 0.02 250 / 0.08);
+  --radius: 8px;
+  font-family: "Segoe UI", Tahoma, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 1120px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+button,
+select,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(840px, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: oklch(0.235 0.035 252);
+  color: oklch(0.94 0.012 252);
+  padding: 18px 16px;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 6px 18px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 8px;
+  background: oklch(0.82 0.11 82);
+  color: oklch(0.25 0.04 252);
+  font-weight: 800;
+}
+
+.brand-title,
+.brand-subtitle,
+.eyebrow,
+.role-note p,
+.metric-label,
+.table-caption {
+  margin: 0;
+}
+
+.brand-title {
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.brand-subtitle {
+  color: oklch(0.78 0.018 252);
+  font-size: 12px;
+}
+
+.role-note {
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid oklch(0.38 0.045 252);
+  border-radius: var(--radius);
+  background: oklch(0.28 0.038 252);
+}
+
+.role-note strong {
+  display: block;
+  font-size: 13px;
+}
+
+.role-note p {
+  margin-top: 4px;
+  color: oklch(0.78 0.018 252);
+  font-size: 12px;
+}
+
+.side-nav {
+  display: grid;
+  gap: 4px;
+}
+
+.nav-button {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: oklch(0.88 0.012 252);
+  text-align: left;
+}
+
+.nav-button:hover,
+.nav-button:focus-visible {
+  background: oklch(0.31 0.04 252);
+  outline: none;
+}
+
+.nav-button.active {
+  background: oklch(0.94 0.02 252);
+  color: oklch(0.25 0.045 252);
+}
+
+.main-shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+h1 {
+  margin: 2px 0 0;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+select,
+textarea {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+select {
+  min-width: 150px;
+  height: 34px;
+  padding: 0 32px 0 10px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 92px;
+  padding: 10px;
+  resize: vertical;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(720px, 1fr) 330px;
+  gap: 18px;
+  padding: 18px;
+}
+
+.workspace,
+.context-panel {
+  min-width: 0;
+}
+
+.stack {
+  display: grid;
+  gap: 16px;
+}
+
+.section {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.section-body {
+  padding: 16px 18px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric {
+  min-height: 98px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.metric-value {
+  display: block;
+  margin-top: 8px;
+  font-size: 26px;
+  font-weight: 780;
+  line-height: 1.1;
+}
+
+.metric-label,
+.metric-sub {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.metric-sub {
+  margin-top: 6px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+  gap: 16px;
+}
+
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--surface-muted);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.badge,
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.status-pill {
+  min-width: 82px;
+  justify-content: center;
+}
+
+.status-info,
+.badge-info {
+  border-color: oklch(0.78 0.05 252);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.badge-success {
+  border-color: oklch(0.76 0.075 155);
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.badge-warning {
+  border-color: oklch(0.82 0.09 78);
+  background: var(--warning-soft);
+  color: oklch(0.46 0.105 78);
+}
+
+.badge-danger {
+  border-color: oklch(0.78 0.09 28);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.badge-muted {
+  border-color: var(--line);
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 650;
+}
+
+.button:hover,
+.button:focus-visible {
+  border-color: var(--line-strong);
+  background: var(--surface-muted);
+  outline: none;
+}
+
+.button.primary {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: oklch(0.98 0.006 252);
+}
+
+.button.success {
+  border-color: var(--success);
+  background: var(--success);
+  color: oklch(0.98 0.006 155);
+}
+
+.button.danger {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: oklch(0.98 0.006 28);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.timetable {
+  table-layout: fixed;
+}
+
+.timetable th:first-child,
+.timetable td:first-child {
+  width: 92px;
+}
+
+.slot-cell {
+  min-height: 64px;
+  padding: 8px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: oklch(0.975 0.005 250);
+}
+
+.slot-cell button {
+  display: grid;
+  width: 100%;
+  min-height: 50px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+}
+
+.slot-cell button:hover,
+.slot-cell button:focus-visible {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.slot-subject {
+  font-weight: 750;
+}
+
+.slot-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cell-blocked button {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.cell-warning button {
+  background: var(--warning-soft);
+}
+
+.cell-passed button {
+  background: var(--success-soft);
+}
+
+.empty-slot button {
+  color: var(--faint);
+}
+
+.panel-list {
+  display: grid;
+  gap: 10px;
+}
+
+.panel-item {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.panel-item p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) 88px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.bar-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.inline-help {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+
+.context-panel {
+  position: sticky;
+  top: 18px;
+  align-self: start;
+}
+
+.permission-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.permission-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.permission-list li:last-child {
+  border-bottom: 0;
+}
+
+.toast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 20;
+  max-width: 360px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  body {
+    min-width: 0;
+  }
+
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .context-panel {
+    position: static;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="เมนูหลัก">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">ST</div>
+          <div>
+            <p class="brand-title">คุณภาพตารางสอน</p>
+            <p class="brand-subtitle">โรงเรียนตัวอย่าง</p>
+          </div>
+        </div>
+
+        <div class="role-note" id="roleNote"></div>
+
+        <nav class="side-nav" id="sideNav" aria-label="เมนูตามบทบาท"></nav>
+      </aside>
+
+      <main class="main-shell">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">ระบบวิเคราะห์และเพิ่มประสิทธิภาพตารางสอนโรงเรียน</p>
+            <h1 id="pageTitle">ภาพรวม</h1>
+          </div>
+
+          <div class="topbar-actions">
+            <label class="select-label" for="roleSelect">
+              <span>บทบาท</span>
+              <select id="roleSelect"></select>
+            </label>
+            <label class="select-label" for="termSelect">
+              <span>ภาคเรียน</span>
+              <select id="termSelect">
+                <option>1/2569</option>
+                <option>2/2569</option>
+              </select>
+            </label>
+            <span class="status-pill status-info" id="statusPill">ฉบับร่าง</span>
+          </div>
+        </header>
+
+        <section class="content-grid">
+          <div class="workspace" id="workspace" aria-live="polite"></div>
+          <aside class="context-panel" id="contextPanel" aria-label="บริบทและสิทธิ์"></aside>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+window.MockData = {
+  metrics: {
+    teachers: 28,
+    classSections: 18,
+    rooms: 24,
+    assignments: 126,
+    hardConflicts: 0,
+    warnings: 5,
+    qualityScore: 82,
+    predictedScore: 87
+  },
+  timetable: {
+    name: "ตาราง ม.ต้น ภาคเรียน 1/2569",
+    status: "draft",
+    classSection: "ม.2/1",
+    selectedCell: {
+      day: "จันทร์",
+      period: "1",
+      subject: "คณิตศาสตร์",
+      teacher: "ครูสมชาย",
+      room: "302",
+      state: "passed"
+    },
+    periods: ["เข้าแถว", "1", "2", "3", "พักกลางวัน", "4", "5", "6", "7"],
+    days: ["จันทร์", "อังคาร", "พุธ", "พฤหัสฯ", "ศุกร์"],
+    entries: {
+      "เข้าแถว-จันทร์": { label: "เข้าแถว", state: "blocked" },
+      "เข้าแถว-อังคาร": { label: "เข้าแถว", state: "blocked" },
+      "เข้าแถว-พุธ": { label: "เข้าแถว", state: "blocked" },
+      "เข้าแถว-พฤหัสฯ": { label: "เข้าแถว", state: "blocked" },
+      "เข้าแถว-ศุกร์": { label: "เข้าแถว", state: "blocked" },
+      "พักกลางวัน-จันทร์": { label: "พัก", state: "blocked" },
+      "พักกลางวัน-อังคาร": { label: "พัก", state: "blocked" },
+      "พักกลางวัน-พุธ": { label: "พัก", state: "blocked" },
+      "พักกลางวัน-พฤหัสฯ": { label: "พัก", state: "blocked" },
+      "พักกลางวัน-ศุกร์": { label: "พัก", state: "blocked" },
+      "1-จันทร์": { subject: "คณิต", teacher: "สมชาย", room: "302", state: "passed" },
+      "2-จันทร์": { subject: "คณิต", teacher: "สมชาย", room: "302", state: "warning", note: "สอนติดกัน" },
+      "1-พุธ": { subject: "วิทย์", teacher: "มาลี", room: "ห้องปฏิบัติการ 1", state: "passed" },
+      "2-พุธ": { subject: "อังกฤษ", teacher: "วารี", room: "301", state: "passed" },
+      "3-พุธ": { subject: "กิจกรรม", teacher: "ระบบ", room: "หอประชุม", state: "warning", note: "วันภาษาไทย" },
+      "1-ศุกร์": { subject: "ไทย", teacher: "อร", room: "301", state: "passed" },
+      "4-พฤหัสฯ": { subject: "คอม", teacher: "กิตติ", room: "คอม 1", state: "passed" }
+    }
+  },
+  quality: [
+    ["ความปลอดภัยจากตารางชน", 30, 30, "ไม่มีตารางชนรุนแรง"],
+    ["ภาระสอนครู", 15, 20, "ครูสมชายสอนติดกัน 2 คาบ"],
+    ["สมดุลการเรียนของนักเรียน", 16, 20, "ม.2/1 มีวิชาหนักติดกัน"],
+    ["การใช้ห้องและทรัพยากร", 12, 15, "ห้องปฏิบัติการถูกใช้กระจุกช่วงเช้า"],
+    ["ความพร้อมตามปฏิทินโรงเรียน", 9, 15, "มีรายการทับกิจกรรมวันภาษาไทย"]
+  ],
+  conflicts: [
+    { type: "warning", title: "วิชาหนักติดกัน", detail: "ม.2/1 มีคณิตศาสตร์ติดกัน 2 คาบในวันจันทร์" },
+    { type: "warning", title: "คำเตือนจากปฏิทิน", detail: "รายการกิจกรรมทับวันภาษาไทย ระบบให้ตรวจสอบก่อนเผยแพร่" },
+    { type: "passed", title: "ครูไม่ชน", detail: "ไม่พบครูสอนสองห้องในคาบเดียวกัน" },
+    { type: "passed", title: "ห้องไม่ชน", detail: "ไม่พบห้องถูกใช้ซ้ำในคาบเดียวกัน" }
+  ],
+  recommendations: [
+    {
+      title: "ย้ายคณิตศาสตร์ ม.2/1 คาบ 2",
+      reason: "ลดวิชาหนักติดกันและลดภาระครูสมชายช่วงเช้า",
+      impact: "+3 คะแนน",
+      action: "ย้ายคาบ"
+    },
+    {
+      title: "เปลี่ยนกิจกรรมวันภาษาไทยเป็น รับทราบคำเตือน",
+      reason: "รายการนี้เป็นกิจกรรมโรงเรียน ไม่ควรนับเป็นช่วงเวลาห้ามจัด แต่ควรมีหมายเหตุ",
+      impact: "+1 ความพร้อม",
+      action: "รับทราบคำเตือน"
+    },
+    {
+      title: "กระจายการใช้ห้องปฏิบัติการ",
+      reason: "ลดการกระจุกของห้องพิเศษช่วงเช้า",
+      impact: "+2 คะแนน",
+      action: "เปลี่ยนห้อง"
+    }
+  ],
+  assignments: [
+    ["ครูสมชาย", "คณิตศาสตร์", "ม.2/1", "4", "ห้องทั่วไป", "คณิตศาสตร์"],
+    ["ครูมาลี", "วิทยาศาสตร์", "ม.2/1", "3", "ห้องปฏิบัติการวิทย์", "วิทยาศาสตร์"],
+    ["ครูวารี", "ภาษาอังกฤษ", "ม.2/1", "3", "ห้องทั่วไป", "ภาษาต่างประเทศ"],
+    ["ครูกิตติ", "คอมพิวเตอร์", "ม.2/1", "2", "ห้องคอม", "เทคโนโลยี"],
+    ["ครูอร", "ภาษาไทย", "ม.2/1", "3", "ห้องทั่วไป", "ภาษาไทย"]
+  ],
+  masterRows: [
+    ["ครู", "28", "ใช้งาน", "จัดกลุ่มสาระครบ"],
+    ["วิชา", "36", "ใช้งาน", "มีระดับความยาก"],
+    ["ห้อง", "24", "ใช้งาน", "มีประเภทห้องและความจุ"],
+    ["ช่วงเวลาห้ามจัด", "3", "ใช้งาน", "เข้าแถว, พักกลางวัน"],
+    ["ปฏิทินโรงเรียน", "8", "warning", "วันวิทย์, วันภาษาไทย, วันสอบ"]
+  ],
+  reviewRows: [
+    ["คณิตศาสตร์", "ครูสมชาย", "18/22", "ผ่าน", "ภาระเหมาะสม"],
+    ["วิทยาศาสตร์", "ครูมาลี", "20/22", "warning", "มีห้องปฏิบัติการช่วงเช้าหลายวัน"],
+    ["ภาษาไทย", "ครูอร", "16/22", "ผ่าน", "ครบจำนวนคาบ"]
+  ],
+  audit: [
+    ["01:10", "ฝ่ายวิชาการ", "ส่งอนุมัติ", "ตาราง ม.ต้น"],
+    ["01:16", "หัวหน้ากลุ่มสาระ", "ตรวจสอบ", "กลุ่มสาระคณิตศาสตร์"],
+    ["01:20", "หัวหน้างานวิชาการ", "อนุมัติ", "ตาราง ม.ต้น"]
+  ]
+};
+    </script>
+    <script>
+window.RoleConfig = {
+  admin: {
+    label: "Admin",
+    thaiLabel: "ผู้ดูแลระบบ",
+    badge: "ควบคุมระบบ",
+    description: "ดูแลผู้ใช้ สิทธิ์ ข้อมูลกลาง และประวัติการดำเนินการ",
+    defaultPage: "dashboard",
+    permissions: ["manage_users", "manage_master_data", "view_audit"],
+    menus: [
+      ["dashboard", "ภาพรวม", "layout-dashboard"],
+      ["users", "ผู้ใช้และสิทธิ์", "shield-check"],
+      ["masterData", "ข้อมูลกลาง", "database"],
+      ["reports", "รายงาน", "file-text"],
+      ["audit", "ประวัติการดำเนินการ", "history"]
+    ]
+  },
+  academicStaff: {
+    label: "ฝ่ายวิชาการ",
+    thaiLabel: "ฝ่ายวิชาการ",
+    badge: "ผู้จัดตาราง",
+    description: "จัดตารางฉบับร่าง ตรวจตารางชน ส่งอนุมัติ และเผยแพร่ตามสิทธิ์",
+    defaultPage: "dashboard",
+    permissions: ["edit_timetable", "submit_timetable", "publish_timetable", "manage_master_data"],
+    menus: [
+      ["dashboard", "ภาพรวม", "layout-dashboard"],
+      ["masterData", "ข้อมูลกลาง", "database"],
+      ["assignments", "ภาระสอน", "clipboard-list"],
+      ["timetable", "จัดตารางสอน", "calendar-days"],
+      ["quality", "ตรวจชนและคุณภาพ", "activity"],
+      ["recommendations", "คำแนะนำ", "lightbulb"],
+      ["approval", "ส่งอนุมัติ/เผยแพร่", "send"],
+      ["reports", "รายงาน", "file-text"]
+    ]
+  },
+  departmentHead: {
+    label: "หัวหน้ากลุ่มสาระ",
+    thaiLabel: "หัวหน้ากลุ่มสาระ",
+    badge: "ผู้ตรวจสอบ",
+    description: "ตรวจภาระครูและความถูกต้องเฉพาะกลุ่มสาระของตนเอง",
+    defaultPage: "departmentDashboard",
+    permissions: ["review_department", "view_department_workload"],
+    menus: [
+      ["departmentDashboard", "ภาพรวม", "layout-dashboard"],
+      ["assignments", "ภาระสอน", "clipboard-list"],
+      ["departmentWorkload", "ภาระสอนครู", "bar-chart-3"],
+      ["review", "ตรวจตาราง", "message-square-text"],
+      ["reports", "รายงาน", "file-text"]
+    ]
+  },
+  academicLead: {
+    label: "หัวหน้างานวิชาการ",
+    thaiLabel: "หัวหน้างานวิชาการ / รองฯ วิชาการ",
+    badge: "ผู้อนุมัติ",
+    description: "ตรวจภาพรวม อนุมัติหรือส่งกลับตารางก่อนเผยแพร่",
+    defaultPage: "approval",
+    permissions: ["approve_timetable", "return_timetable", "publish_timetable", "view_quality"],
+    menus: [
+      ["dashboard", "ภาพรวม", "layout-dashboard"],
+      ["approval", "รายการรออนุมัติ", "check-circle-2"],
+      ["quality", "สรุปคุณภาพ", "activity"],
+      ["recommendations", "คำแนะนำ", "lightbulb"],
+      ["reports", "รายงาน", "file-text"]
+    ]
+  },
+  teacher: {
+    label: "ครูผู้สอน",
+    thaiLabel: "ครูผู้สอน",
+    badge: "มุมมองหลังเผยแพร่",
+    description: "ดูตารางสอนและภาระสอนของตนเองหลังเผยแพร่",
+    defaultPage: "myTimetable",
+    permissions: ["view_own_timetable", "print_own_timetable"],
+    menus: [
+      ["myTimetable", "ตารางสอนของฉัน", "calendar-check"],
+      ["myWorkload", "ภาระสอนของฉัน", "briefcase-business"],
+      ["reports", "พิมพ์/PDF", "printer"]
+    ]
+  },
+  homeroomTeacher: {
+    label: "ครูประจำชั้น",
+    thaiLabel: "ครูประจำชั้น",
+    badge: "มุมมองห้องเรียน",
+    description: "ดูและพิมพ์ตารางเรียนของห้องที่รับผิดชอบ",
+    defaultPage: "homeroomTimetable",
+    permissions: ["view_homeroom_timetable", "print_homeroom_timetable"],
+    menus: [
+      ["homeroomTimetable", "ตารางเรียนของห้อง", "calendar-range"],
+      ["classTeachers", "ครูประจำวิชา", "users"],
+      ["reports", "พิมพ์/PDF", "printer"]
+    ]
+  },
+  director: {
+    label: "ผู้บริหาร / ผู้ดูแลภาพรวม",
+    thaiLabel: "ผู้บริหาร / ผู้ดูแลภาพรวม",
+    badge: "ดูอย่างเดียว",
+    description: "ดูภาพรวม คุณภาพตาราง และรายงานหลังเผยแพร่",
+    defaultPage: "executiveDashboard",
+    permissions: ["view_dashboard", "view_reports"],
+    menus: [
+      ["executiveDashboard", "ภาพรวมผู้บริหาร", "layout-dashboard"],
+      ["quality", "สรุปคุณภาพ", "activity"],
+      ["reports", "รายงาน", "file-text"]
+    ]
+  }
+};
+    </script>
+    <script>
 (function () {
   const roles = window.RoleConfig;
   const data = window.MockData;
@@ -11,7 +889,6 @@
     warnings: data.metrics.warnings,
     qualityScore: data.metrics.qualityScore,
     reviewSaved: false,
-    masterTab: "subjects",
     lastMessage: ""
   };
 
@@ -72,8 +949,6 @@
       .map(([key, role]) => `<option value="${key}">${role.thaiLabel}</option>`)
       .join("");
     roleSelect.value = state.roleKey;
-    const tabParam = new URLSearchParams(window.location.search).get("tab");
-    if (tabParam && masterTabs().some((tab) => tab.key === tabParam)) state.masterTab = tabParam;
     roleSelect.addEventListener("change", () => {
       state.roleKey = roleSelect.value;
       state.pageKey = roles[state.roleKey].defaultPage;
@@ -110,36 +985,24 @@
   }
 
   function renderNav(role) {
-    sideNav.innerHTML = `
-      <div class="nav-section-label">เมนูตามบทบาท</div>
-      ${role.menus
-        .map(([key, label, icon]) => {
-          const active = key === state.pageKey ? "active" : "";
-          const badge = navigationBadge(key);
-          return `
-            <button class="nav-button ${active}" data-page="${key}" type="button">
-              <i data-lucide="${icon}"></i>
-              <span class="nav-label">${label}</span>
-              ${badge ? `<span class="nav-count">${badge}</span>` : ""}
-            </button>
-          `;
-        })
-        .join("")}
-      <div class="nav-section-label">ระบบ</div>
-      <button class="nav-button" type="button">
-        <i data-lucide="book-open"></i>
-        <span class="nav-label">คู่มือการใช้งาน</span>
-      </button>
-    `;
+    sideNav.innerHTML = role.menus
+      .map(([key, label, icon]) => {
+        const active = key === state.pageKey ? "active" : "";
+        return `
+          <button class="nav-button ${active}" data-page="${key}" type="button">
+            <i data-lucide="${icon}"></i>
+            <span>${label}</span>
+          </button>
+        `;
+      })
+      .join("");
 
-    sideNav.querySelectorAll(".nav-button[data-page]").forEach((button) => {
+    sideNav.querySelectorAll(".nav-button").forEach((button) => {
       button.addEventListener("click", () => {
         state.pageKey = button.dataset.page;
         render();
       });
     });
-
-    restoreSidebarScroll();
   }
 
   function renderContext(role) {
@@ -165,14 +1028,13 @@
       <section class="section" style="margin-top: 14px;">
         <div class="section-header">
           <div>
-            <h2>ตรวจก่อนเปิดรอบจัดตาราง</h2>
+            <h2>สถานะตาราง</h2>
             <p>${data.timetable.name}</p>
           </div>
-          <span class="badge badge-warning">ต้องตรวจ 2 จุด</span>
         </div>
         <div class="section-body panel-list">
           <div class="panel-item">
-            <strong>สถานะรอบงาน</strong>
+            <strong>สถานะ</strong>
             <p><span class="status-pill ${statusClass(state.timetableStatus)}">${statusLabel(state.timetableStatus)}</span></p>
           </div>
           <div class="panel-item">
@@ -191,39 +1053,29 @@
   function renderDashboard(role) {
     return `
       <div class="stack">
-        ${renderPhasePanel(role)}
-        ${renderStatsStrip([
-          ["ครู", `${data.metrics.teachers}/30`, "เปิดใช้งานและมีภาระสอน", 93, "success", "users"],
-          ["รายวิชาเปิดสอน", "36/38", "พร้อมนำไปสร้างภาระสอน", 95, "success", "masterData"],
-          ["ห้องและสถานที่", `${data.metrics.rooms}`, "ห้องทั่วไป ห้องปฏิบัติการ สนาม", 88, "info", "masterData"],
-          ["ระดับชั้น/ห้อง", `${data.metrics.classSections}`, "ม.1 ถึง ม.6", 100, "success", "masterData"]
+        ${renderMetricSection("ภาพรวมงานจัดตาราง", [
+          ["ครู", data.metrics.teachers, "ข้อมูลที่ใช้งาน"],
+          ["ห้องเรียน", data.metrics.classSections, "ม.1 ถึง ม.6"],
+          ["ตารางชน", state.hardConflictCount, "ตารางชนรุนแรง"],
+          ["คุณภาพ", `${state.qualityScore}/100`, "พร้อมส่งตรวจ"]
         ])}
         <section class="section">
           <div class="section-header">
             <div>
-              <h2>ศูนย์ควบคุมก่อนจัดตาราง</h2>
-              <p>ดึง pattern จาก TPSS: dashboard ต้องพาไปแก้ข้อมูลที่ขาดได้ทันที</p>
+              <h2>งานที่ต้องดำเนินการ</h2>
+              <p>มุมมองสำหรับ ${role.thaiLabel}</p>
             </div>
             <div class="actions">
-              <button class="button primary" data-go="masterData"><i data-lucide="database"></i> ตรวจข้อมูลกลาง</button>
-              <button class="button" data-go="quality"><i data-lucide="activity"></i> ตรวจชนและคุณภาพ</button>
+              <button class="button primary" data-go="timetable"><i data-lucide="calendar-days"></i> เปิดตาราง</button>
+              <button class="button" data-go="quality"><i data-lucide="activity"></i> วิเคราะห์</button>
             </div>
-          </div>
-          <div class="section-body dashboard-grid">
-            ${renderPreflightPanel()}
-            ${renderDashboardActionGrid(role)}
-          </div>
-        </section>
-        <section class="section">
-          <div class="section-header">
-            <div>
-              <h2>กิจกรรมล่าสุดและเส้นทางอนุมัติ</h2>
-              <p>ทุกการแก้ข้อมูลสำคัญควรย้อนดูได้ผ่าน audit trail</p>
-            </div>
-            <span class="badge badge-muted">พร้อมตรวจย้อนหลัง</span>
           </div>
           <div class="section-body split">
-            ${renderSimpleTable(["เวลา", "ผู้ใช้", "การดำเนินการ", "รายการ"], data.audit)}
+            ${renderPanelList([
+              ["รอตรวจสอบ", "หัวหน้ากลุ่มสาระคณิตศาสตร์ยังไม่ได้บันทึกการตรวจสอบ", "warning"],
+              ["พร้อมส่งอนุมัติ", "ตาราง ม.ต้น ไม่มีตารางชนรุนแรง", "passed"],
+              ["คำเตือนจากปฏิทิน", "มีรายการทับกิจกรรมวันภาษาไทย 1 รายการ", "warning"]
+            ])}
             ${renderStatusTimeline()}
           </div>
         </section>
@@ -303,55 +1155,17 @@
   }
 
   function renderMasterData() {
-    const tabs = masterTabs();
-    const activeTab = tabs.find((tab) => tab.key === state.masterTab) || tabs[0];
     return `
-      <section class="section master-data-shell">
+      <section class="section">
         <div class="section-header">
           <div>
             <h2>ข้อมูลกลาง</h2>
-            <p>หน้าเดียวหลายแท็บแบบ TPSS: ใช้เป็นฐานก่อนเปิดช่วงจัดตาราง</p>
+            <p>ข้อมูลกลางสำหรับขั้นตอนจัดตารางสอน</p>
           </div>
-          <div class="actions">
-            <button class="button"><i data-lucide="upload"></i> นำเข้าไฟล์</button>
-            <button class="button primary"><i data-lucide="plus"></i> เพิ่ม${activeTab.singular}</button>
-          </div>
+          <button class="button primary"><i data-lucide="plus"></i> เพิ่มข้อมูล</button>
         </div>
-        <div class="section-body stack">
-          <div class="tab-strip" role="tablist" aria-label="หมวดข้อมูลกลาง">
-            ${tabs
-              .map((tab) => `
-                <button class="tab-button ${tab.key === activeTab.key ? "active" : ""}" data-master-tab="${tab.key}" type="button" role="tab">
-                  ${tab.label}
-                  <span class="badge ${tab.warning ? "badge-warning" : "badge-muted"}">${tab.count}</span>
-                </button>
-              `)
-              .join("")}
-          </div>
-          <div class="filter-bar">
-            <div class="filter-controls">
-              <label class="select-label">
-                <span>ค้นหา</span>
-                <input type="search" value="" placeholder="ค้นหา${activeTab.singular}" />
-              </label>
-              <label class="select-label">
-                <span>สถานะ</span>
-                <select><option>ทั้งหมด</option><option>ใช้งาน</option><option>ต้องตรวจ</option></select>
-              </label>
-              <label class="select-label">
-                <span>ตัวกรองหลัก</span>
-                <select><option>${activeTab.filter}</option><option>คณิตศาสตร์</option><option>วิทยาศาสตร์</option><option>ภาษาไทย</option></select>
-              </label>
-            </div>
-            <div class="actions">
-              <button class="button"><i data-lucide="rotate-ccw"></i> ล้างตัวกรอง</button>
-              <button class="button"><i data-lucide="file-down"></i> แม่แบบ CSV</button>
-            </div>
-          </div>
-          <div class="inline-help">
-            ${activeTab.note} ระบบควรจำ filter แยกตามแท็บ และ เปิดเป็นลิงก์ตรงได้ เช่น <strong>?tab=${activeTab.key}</strong>
-          </div>
-          ${renderSimpleTable(activeTab.headers, activeTab.rows)}
+        <div class="section-body">
+          ${renderSimpleTable(["ประเภท", "จำนวน", "สถานะ", "หมายเหตุ"], data.masterRows)}
         </div>
       </section>
     `;
@@ -673,187 +1487,6 @@
     `;
   }
 
-  function renderPhasePanel(role) {
-    return `
-      <section class="phase-panel">
-        <div class="phase-panel-body">
-          <div class="phase-title">
-            <strong>ปีการศึกษา 2569 ภาคเรียน 1</strong>
-            <span>Phase ปัจจุบัน: ตรวจข้อมูลกลางก่อนเปิดรอบจัดตาราง</span>
-          </div>
-          <div class="actions">
-            <span class="badge badge-warning">ตรวจก่อนเปิดรอบ</span>
-            <button class="button" data-go="masterData"><i data-lucide="settings"></i> ตั้งค่าปีการศึกษา</button>
-            <button class="button primary" data-go="timetable"><i data-lucide="calendar-plus"></i> เปิดรอบจัดตาราง</button>
-          </div>
-        </div>
-        <div class="phase-steps">
-          <div class="phase-step"><strong>1. ข้อมูลหลักถูกต้อง</strong><span>ครู วิชา ห้อง เวลา</span></div>
-          <div class="phase-step"><strong>2. จัดตารางฉบับร่าง</strong><span>ฝ่ายวิชาการจัดและแก้ไข</span></div>
-          <div class="phase-step"><strong>3. ตรวจและอนุมัติ</strong><span>กลุ่มสาระและรองฯ วิชาการ</span></div>
-          <div class="phase-step"><strong>4. เผยแพร่</strong><span>ครูและผู้บริหารดูรายงาน</span></div>
-        </div>
-      </section>
-    `;
-  }
-
-  function renderStatsStrip(metrics) {
-    return `
-      <div class="stats-strip">
-        ${metrics
-          .map(([label, value, sub, progress, type, go]) => `
-            <button class="stats-cell" type="button" data-go="${go}">
-              <span class="stats-cell-top">
-                <span class="stats-label">${label}</span>
-                <span class="badge ${badgeClass(type)}">${typeLabel(type)}</span>
-              </span>
-              <span class="stats-value">${value}</span>
-              <p class="metric-sub">${sub}</p>
-              <span class="progress-track"><span class="progress-fill" style="width:${progress}%"></span></span>
-            </button>
-          `)
-          .join("")}
-      </div>
-    `;
-  }
-
-  function renderPreflightPanel() {
-    const checks = [
-      ["success", "ข้อมูลครูพร้อมใช้งาน", "28 คนเปิดใช้งาน มี quota สอนครบ"],
-      ["warning", "รายวิชาขาดครูหลัก", "2 รายวิชายังไม่มีครูผู้รับผิดชอบ"],
-      ["warning", "ปฏิทินโรงเรียนต้องตรวจ", "วันภาษาไทยและวันสอบปลายภาคต้องยืนยัน"],
-      ["success", "ห้องเรียนพร้อม", "24 ห้องมีประเภทและความจุครบ"]
-    ];
-    return `
-      <div class="ops-panel">
-        <div class="ops-panel-header">
-          <div>
-            <h3>สิ่งที่ต้องแก้ก่อนจัดตาราง</h3>
-            <p>ทำหน้าที่เป็น ด่านตรวจก่อนเปิดรอบแบบ TPSS ไม่ให้เปิด phase หากข้อมูล critical ยังไม่พร้อม</p>
-          </div>
-          <span class="badge badge-warning">2 warning</span>
-        </div>
-        <ul class="preflight-list">
-          ${checks
-            .map(([type, title, detail]) => `
-              <li class="preflight-item">
-                <span class="dot ${type}"></span>
-                <span><strong>${title}</strong><p>${detail}</p></span>
-                <span class="badge ${badgeClass(type)}">${typeLabel(type)}</span>
-              </li>
-            `)
-            .join("")}
-        </ul>
-      </div>
-    `;
-  }
-
-  function renderDashboardActionGrid(role) {
-    const actions = [
-      ["masterData", "ข้อมูลกลาง", "ตรวจครู วิชา ห้อง และช่วงเวลา"],
-      ["assignments", "ภาระสอน", "จับคู่ครู วิชา ห้องเรียน จำนวนคาบ"],
-      ["quality", "ตรวจชน", "แยก รายการชนแบบบล็อกและคำเตือน"],
-      ["approval", "อนุมัติ", "ส่งตรวจ อนุมัติ และเผยแพร่"]
-    ];
-    return `
-      <div class="ops-panel">
-        <div class="ops-panel-header">
-          <div>
-            <h3>ทางลัดงานหลัก</h3>
-            <p>คลิกจาก dashboard ไปแก้จุดที่เกี่ยวข้องทันที</p>
-          </div>
-          <span class="badge badge-info">${role.badge}</span>
-        </div>
-        <div class="action-grid">
-          ${actions
-            .map(([go, title, detail]) => `
-              <button class="action-tile" type="button" data-go="${go}">
-                <span><strong>${title}</strong><span>${detail}</span></span>
-                <i data-lucide="arrow-up-right"></i>
-              </button>
-            `)
-            .join("")}
-        </div>
-      </div>
-    `;
-  }
-
-  function masterTabs() {
-    return [
-      {
-        key: "departments",
-        label: "กลุ่มสาระ",
-        singular: "กลุ่มสาระ",
-        count: 8,
-        filter: "ทุกกลุ่มสาระ",
-        note: "ใช้กำหนดเจ้าของรายวิชาและขอบเขตการตรวจของหัวหน้ากลุ่มสาระ",
-        headers: ["กลุ่มสาระ", "หัวหน้ากลุ่มสาระ", "จำนวนครู", "สถานะ"],
-        rows: [
-          ["คณิตศาสตร์", "ครูประภา", "6", "ใช้งาน"],
-          ["วิทยาศาสตร์", "ครูมาลี", "5", "ใช้งาน"],
-          ["ภาษาต่างประเทศ", "ครูวารี", "4", "ใช้งาน"]
-        ]
-      },
-      {
-        key: "subjects",
-        label: "รายวิชา",
-        singular: "รายวิชา",
-        count: 36,
-        filter: "ทุกระดับชั้น",
-        warning: true,
-        note: "รายวิชาต้องมีระดับชั้น จำนวนคาบต่อสัปดาห์ และประเภทห้องที่ต้องใช้",
-        headers: ["รหัส", "รายวิชา", "ระดับชั้น", "คาบ/สัปดาห์", "สถานะ"],
-        rows: [
-          ["ค22101", "คณิตศาสตร์", "ม.2", "4", "ใช้งาน"],
-          ["ว22101", "วิทยาศาสตร์", "ม.2", "3", "ใช้งาน"],
-          ["อ22101", "ภาษาอังกฤษ", "ม.2", "3", "warning"]
-        ]
-      },
-      {
-        key: "teachers",
-        label: "ครู",
-        singular: "ครู",
-        count: 28,
-        filter: "ทุกกลุ่มสาระ",
-        note: "ข้อมูลครูต้องเชื่อมกับ user, quota ต่อสัปดาห์ และข้อจำกัดการสอน",
-        headers: ["ชื่อครู", "กลุ่มสาระ", "Quota", "ภาระสอน", "สถานะ"],
-        rows: [
-          ["ครูสมชาย", "คณิตศาสตร์", "22", "18", "ใช้งาน"],
-          ["ครูมาลี", "วิทยาศาสตร์", "22", "20", "warning"],
-          ["ครูอร", "ภาษาไทย", "22", "16", "ใช้งาน"]
-        ]
-      },
-      {
-        key: "rooms",
-        label: "ห้องเรียน",
-        singular: "ห้องเรียน",
-        count: 24,
-        filter: "ทุกประเภทห้อง",
-        note: "ห้องต้องมีประเภท ความจุ และสถานะเพื่อใช้ตรวจ ห้องซ้อนและความจุห้อง",
-        headers: ["ห้อง", "ประเภท", "อาคาร", "ความจุ", "สถานะ"],
-        rows: [
-          ["302", "ห้องทั่วไป", "อาคาร 3", "45", "ใช้งาน"],
-          ["ห้องปฏิบัติการ 1", "วิทยาศาสตร์", "อาคาร 4", "36", "ใช้งาน"],
-          ["สนาม", "พละ", "กลางแจ้ง", "120", "ใช้งาน"]
-        ]
-      },
-      {
-        key: "timeslots",
-        label: "ช่วงเวลาเรียน",
-        singular: "ช่วงเวลา",
-        count: 9,
-        filter: "ทุกวัน",
-        note: "ช่วงเวลาเรียนและช่วงเวลาห้ามจัดเป็นฐานของ conflict checker",
-        headers: ["คาบ", "เวลา", "ประเภท", "นับภาระครู", "สถานะ"],
-        rows: [
-          ["เข้าแถว", "08:00-08:20", "ห้ามจัด", "ไม่", "ใช้งาน"],
-          ["1", "08:30-09:20", "คาบเรียน", "ใช่", "ใช้งาน"],
-          ["พักกลางวัน", "11:50-12:40", "ห้ามจัด", "ไม่", "ใช้งาน"]
-        ]
-      }
-    ];
-  }
-
   function renderTimetableGrid() {
     const header = data.timetable.days.map((day) => `<th>${day}</th>`).join("");
     const rows = data.timetable.periods
@@ -1018,16 +1651,6 @@
       });
     });
 
-    workspace.querySelectorAll("[data-master-tab]").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.masterTab = button.dataset.masterTab;
-        if (state.pageKey === "masterData") {
-          const nextUrl = `${window.location.pathname}?tab=${encodeURIComponent(state.masterTab)}`;
-          window.history.replaceState(null, "", nextUrl);
-        }
-        render();
-      });
-    });
     workspace.querySelectorAll("[data-cell-day]").forEach((button) => {
       button.addEventListener("click", () => {
         state.selectedCell = {
@@ -1127,31 +1750,6 @@
     return "ฝ่ายวิชาการและผู้มีสิทธิ์เห็นรายงานตารางและรายงานคุณภาพตามขั้นตอนงาน";
   }
 
-  function navigationBadge(key) {
-    const badges = {
-      masterData: 2,
-      quality: state.warnings,
-      approval: state.timetableStatus === "submitted" ? 1 : "",
-      review: state.reviewSaved ? "" : 1,
-      audit: data.audit.length
-    };
-    return badges[key] || "";
-  }
-
-  function restoreSidebarScroll() {
-    const key = `school.scheduler.sidebar.scrollTop.${state.roleKey}`;
-    const saved = Number(window.localStorage.getItem(key) || 0);
-    window.requestAnimationFrame(() => {
-      sideNav.scrollTop = saved;
-      sideNav.style.visibility = "visible";
-    });
-    sideNav.onscroll = () => {
-      window.clearTimeout(sideNav.scrollTimer);
-      sideNav.scrollTimer = window.setTimeout(() => {
-        window.localStorage.setItem(key, String(sideNav.scrollTop));
-      }, 120);
-    };
-  }
   function badgeClass(type) {
     if (type === "error" || type === "blocked" || type === "danger") return "badge-danger";
     if (type === "warning" || type === "pending") return "badge-warning";
@@ -1185,8 +1783,7 @@
       view_homeroom_timetable: "ดูตารางเรียนของห้องประจำชั้น",
       print_homeroom_timetable: "พิมพ์ตารางเรียนของห้องประจำชั้น",
       view_dashboard: "ดูภาพรวมระบบ",
-      view_reports: "ดูรายงาน",
-      upload_import: "นำเข้าข้อมูล"
+      view_reports: "ดูรายงาน"
     };
     return labels[permission] || permission;
   }
@@ -1212,7 +1809,6 @@
       success: "สำเร็จ",
       pending: "รอดำเนินการ",
       active: "ใช้งาน",
-      info: "พร้อม",
       empty: "ว่าง"
     };
     return labels[type] || type;
@@ -1233,3 +1829,6 @@
     }
   }
 })();
+    </script>
+  </body>
+</html>
